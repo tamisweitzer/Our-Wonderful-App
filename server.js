@@ -1,6 +1,7 @@
 const express = require( 'express' );
 const db = require( 'better-sqlite3' )( 'ourApp.db' );
 const app = express();
+const bcrypt = require( 'bcrypt' );
 
 db.pragma('journal_mode = WAL')
 
@@ -69,7 +70,7 @@ const errors = [];
   // Disallow special characters.
   if ( req.body.username && !req.body.username.match( /^[a-zA-Z0-9]+$/ ) ) errors.push( "Username may not contain special characters." );
 
-// Validate password is minimum 3 chars, and maximum 13 chars.
+  // Validate password is minimum 3 chars, and maximum 13 chars.
   if ( !req.body.password ) errors.push( "You must provide a password." );
   if ( req.body.password && req.body.password.length < 8 ) errors.push( "Password must be at least 8 characters long." );
   if ( req.body.password && req.body.password.length > 100 ) errors.push( "Password must be less than 101 characters long." );
@@ -83,6 +84,10 @@ const errors = [];
   }
 
 
+  // Encrypt the password before sending to the database.
+  const salt = bcrypt.genSaltSync( 10 );
+  req.body.password = bcrypt.hashSync( req.body.password, salt );
+
   // Save new user to database.
   const statement = db.prepare("INSERT INTO users (username, password) VALUES(?, ?)");
 
@@ -90,7 +95,7 @@ const errors = [];
 
   // Log new user in with a cookie.
 
-  res.send( 'thanks' );
+  res.render( 'homepage' );
   // res.render( "homepage" );
 
 
