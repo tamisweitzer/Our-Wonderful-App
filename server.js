@@ -94,10 +94,16 @@ const errors = [];
   statement.run(req.body.username, req.body.password);
 
   // Log new user in with a cookie.
+  const oneDay = 1000 * 60 * 60 * 24;
+  res.cookie( "OurWonderfulApp", 'TODO_cookie_token', {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+    maxAge: oneDay
+  } );
+
 
   res.render( 'homepage' );
-  // res.render( "homepage" );
-
 
 } );
 
