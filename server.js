@@ -1,7 +1,11 @@
+require( 'dotenv' ).config();
+
 const express = require( 'express' );
 const db = require( 'better-sqlite3' )( 'ourApp.db' );
 const app = express();
 const bcrypt = require( 'bcrypt' );
+const jwt = require( 'jsonwebtoken' );
+
 
 db.pragma('journal_mode = WAL')
 
@@ -91,11 +95,26 @@ const errors = [];
   // Save new user to database.
   const statement = db.prepare("INSERT INTO users (username, password) VALUES(?, ?)");
 
-  statement.run(req.body.username, req.body.password);
+  // Pass in the arguments for the ?'s.
+  const result = statement.run( req.body.username, req.body.password );
+
+  // Look up the user who who just registered.
+  const lookupStatement = db.prepare( "SELECT * FROM users WHERE ROWID = ?" );
+
+  // Get the row ID for the last registered user.
+  const user = lookupStatement.get(result.lastInsertRowid);
 
   // Log new user in with a cookie.
   const oneDay = 1000 * 60 * 60 * 24;
-  res.cookie( "OurWonderfulApp", 'TODO_cookie_token', {
+
+  // Use JSON Web Token for secure transmission of data.
+  const cookieToken = jwt.sign( {
+    exp: Math.floor( Date.now() / 1000 ) + ( 60 * 60 * 24 ),
+    userid: user.id,
+    username: user.username
+  }, process.env.JWTSECRET );
+
+  res.cookie( "OurWonderfulApp", cookieToken, {
     httpOnly: true,
     secure: true,
     sameSite: 'strict',
@@ -103,7 +122,7 @@ const errors = [];
   } );
 
 
-  res.render( 'homepage' );
+  res.send( "<a href='/' style='font-size:2.5rem;'>Registration complete!</a>" );
 
 } );
 
