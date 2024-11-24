@@ -14,7 +14,7 @@ const createTables = db.transaction( () => {
         password STRING NOT NULL
       )
       `)
-    .run();
+    .run()
 });
 
 createTables();
@@ -84,11 +84,14 @@ const errors = [];
 
 
   // Save new user to database.
+  const statement = db.prepare("INSERT INTO users (username, password) VALUES(?, ?)");
+
+  statement.run(req.body.username, req.body.password);
 
   // Log new user in with a cookie.
 
-
-  res.render( "homepage" );
+  res.send( 'thanks' );
+  // res.render( "homepage" );
 
 
 } );
