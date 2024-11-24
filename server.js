@@ -1,7 +1,24 @@
 const express = require( 'express' );
+const db = require( 'better-sqlite3' )( 'ourApp.db' );
 const app = express();
 
+db.pragma('journal_mode = WAL')
 
+// Database set up
+const createTables = db.transaction( () => {
+  db
+    .prepare( `
+      CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username STRING NOT NULL UNIQUE,
+        password STRING NOT NULL
+      )
+      `)
+    .run();
+});
+
+createTables();
+// end
 
 
 // Tell Express we are using EJS as the templating engine.
