@@ -22,6 +22,9 @@
     <h2>Main section</h2>
     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
 
+    <% errors.forEach(error => { %>
+    <p class="notice"><%= error %></p>
+    <% }) %>
     <form action="/register" method="POST" id="register-form" name="register-form">
       <fieldset>
         <legend>Create an account</legend>
