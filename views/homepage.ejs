@@ -22,16 +22,16 @@
     <h2>Main section</h2>
     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
 
-    <form action="/register" method="POST">
+    <form action="/register" method="POST" id="register-form" name="register-form">
       <fieldset>
         <legend>Create an account</legend>
-        <label for="username">Username</label>
-        <input type="text" id="username">
+        <label for="username" name="lbl-username">Username</label>
+        <input type="text" id="username" name="username">
 
-        <label for="password">Password</label>
-        <input type="password">
+        <label for="password" name="lbl-password">Password</label>
+        <input type="password" id="password" name="password">
         <br>
-        <button>Sign up</button>
+        <input type="submit" id="submit" name="submit"></input>
       </fieldset>
     </form>
   </main>
