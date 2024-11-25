@@ -108,6 +108,11 @@ const errors = [];
   // Disallow special characters.
   if ( req.body.username && !req.body.username.match( /^[a-zA-Z0-9]+$/ ) ) errors.push( "Username may not contain special characters." );
 
+  // Check if username exists already.
+  const usernameExistsStmt = db.prepare( "SELECT * FROM users WHERE username = ?" );
+  const usernameExists = usernameExistsStmt.get( req.body.username );
+  if ( usernameExists ) errors.push( "Please choose a different username" );
+
   // Validate password is minimum 3 chars, and maximum 13 chars.
   if ( !req.body.password ) errors.push( "You must provide a password." );
   if ( req.body.password && req.body.password.length < 8 ) errors.push( "Password must be at least 8 characters long." );
