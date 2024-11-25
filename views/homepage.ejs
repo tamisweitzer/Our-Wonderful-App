@@ -14,7 +14,12 @@
 
     <nav>
       <a href="/">Home</a>
+      <% if (user) { %>
+      <a href="/create-post">Create Post</a>
+      <a href="/logout">Log out</a>
+      <% } else { %>
       <a href="/login">Login</a>
+      <%     }  %>
     </nav>
   </header>
 
