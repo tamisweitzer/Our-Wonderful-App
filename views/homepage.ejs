@@ -1,32 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Homepage | Our Wonderful App</title>
-  <!-- Minified version -->
-  <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css"> -->
-  <link rel="stylesheet" href="./styles.css">
-</head>
+<% pageTitle="Home"; %>
+<%- include('inc/head') %>
 <body>
-  <header>
-    <h1><a href="/">Our Wonderful App</a></h1>
-
-    <nav>
-      <a href="/">Home</a>
-      <% if (user) { %>
-      <a href="/create-post">Create Post</a>
-      <a href="/dashboard">Dashboard</a>
-      <a href="/logout">Log out</a>
-      <% } else { %>
-      <a href="/login">Login</a>
-      <%     }  %>
-    </nav>
-  </header>
+  <%- include('inc/header') %>
 
   <main>
-    <h2>Home</h2>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+    <h2>Register a new account</h2>
+    <p>Or sign in above.</p>
 
     <% errors.forEach(error => { %>
     <p class="notice"><%= error %></p>
@@ -45,8 +26,6 @@
     </form>
   </main>
 
-  <footer>
-    <div>&copy; OWA</div>
-  </footer>
+  <%- include('inc/footer') %>
 </body>
 </html>

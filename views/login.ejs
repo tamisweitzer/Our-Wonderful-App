@@ -1,36 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | Our Wonderful App</title>
-  <!-- Minified version -->
-  <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css"> -->
-  <link rel="stylesheet" href="./styles.css">
-</head>
+<% pageTitle="Login"; %>
+<%- include('inc/head') %>
 <body>
-  <header>
-    <h1><a href="/">Our Wonderful App</a></h1>
-
-    <nav>
-      <a href="/">Home</a>
-      <a href="/login">Login</a>
-    </nav>
-  </header>
+  <%- include('inc/header') %>
 
   <main>
     <h2>Login</h2>
-    <form action="">
+    <form action="/login" method="POST">
       <label for="username">Username</label>
       <input type="text" id="username">
 
       <label for="password">Password</label>
       <input type="password">
+      <br>
+      <input type="submit">
     </form>
   </main>
 
-  <footer>
-    <div>&copy; OWA</div>
-  </footer>
+  <%- include('inc/footer') %>
 </body>
 </html>
