@@ -7,14 +7,22 @@
 
   <main>
     <h2>Login</h2>
-    <form action="/login" method="POST">
-      <label for="username">Username</label>
-      <input type="text" id="username">
 
-      <label for="password">Password</label>
-      <input type="password">
-      <br>
-      <input type="submit">
+    <% errors.forEach(error => { %>
+    <p class="notice"><%= error %></p>
+    <% }) %>
+
+    <form action="/login" method="POST" id="login-form" name="login-form">
+      <fieldset>
+        <legend>Log in to your account</legend>
+        <label for="username" name="lbl-username">Username</label>
+        <input type="text" id="username" name="username">
+
+        <label for="password" name="lbl-password">Password</label>
+        <input type="password" id="password" name="password">
+        <br>
+        <input type="submit" id="submit" name="submit" />
+      </fieldset>
     </form>
   </main>
 

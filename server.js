@@ -56,24 +56,37 @@ app.use( function ( req, res, next ) {
 } );
 
 
-// List of Routes
+
+// GET Requests_______________________
 
 // GET '/' Home
 app.get( '/', ( req, res ) => {
-
   if ( req.user ) {
     return res.render('dashboard')
   }
   else {
     return res.render('homepage');
   }
-
 } );
 
 // GET '/login' Display login screen.
 app.get( '/login', ( req, res ) => {
   res.render( 'login' );
-})
+} );
+
+// GET '/logout' Log user out of app.
+app.get( '/logout', ( req, res ) => {
+  res.clearCookie( 'OurWonderfulApp' );
+  res.redirect( '/' );
+} );
+
+// GET '/dashboard' Redirect logged in users to their dashboard.
+app.get( '/dashboard', ( req, res ) => {
+  res.render( 'dashboard' );
+} );
+
+
+// POST Requests_______________________
 
 // POST '/register' Send post request when attempting to login.
 app.post( '/register', ( req, res ) => {
@@ -141,13 +154,57 @@ const errors = [];
     maxAge: oneDay
   } );
 
-  res.send( "<a href='/' style='font-size:2.5rem;'>Registration complete!</a>" );
+  res.redirect( '/' );
 } );
 
+// POST '/login' Process login request
+app.post( '/login', ( req, res ) => {
+  const errors = [];
+  if ( typeof req.body.username !== 'string' ) req.body.username = '';
+  if ( typeof req.body.password !== 'string' ) req.body.password = '';
 
-app.get( '/dashboard', ( req, res ) => {
-  res.render( 'dashboard' );
-})
+  if ( req.body.username.trim() === "" || req.body.password === "") {
+    errors.push( "Invalid username or password" );
+  }
+
+  if ( errors.length ) {
+    return res.render( 'login', { errors } );
+  }
+
+  const userInQuestionStatement = db.prepare( "SELECT * FROM users WHERE username = ?" );
+  const userInQuestion = userInQuestionStatement.get( req.body.username );
+
+  if ( !userInQuestion) {
+    errors.push( "Invalid username or password" );
+    res.render('login', { errors })
+  }
+
+  const matchOrNot = bcrypt.compareSync( req.body.password, userInQuestion.password );
+
+  if ( !matchOrNot ) {
+     errors.push( "Invalid username or password" );
+    res.render('login', { errors })
+  }
+
+  const cookieToken = jwt.sign( {
+    exp: Math.floor( Date.now() / 1000 ) + ( 60 * 60 * 24 ),
+    userid: userInQuestion.id,
+    username: userInQuestion.username
+  }, process.env.JWTSECRET );
+
+  const oneDay = 1000 * 60 * 60 * 24;
+  res.cookie( "OurWonderfulApp", cookieToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+    maxAge: oneDay
+  } );
+
+  res.redirect( '/' );
+
+
+});
+
 
 
 app.listen( 3000 );
