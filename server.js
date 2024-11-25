@@ -5,6 +5,7 @@ const db = require( 'better-sqlite3' )( 'ourApp.db' );
 const app = express();
 const bcrypt = require( 'bcrypt' );
 const jwt = require( 'jsonwebtoken' );
+const cookieParser = require( 'cookie-parser' );
 
 
 db.pragma('journal_mode = WAL')
@@ -33,11 +34,26 @@ app.set( 'view engine', 'ejs' )
 app.use( express.static( 'public' ) );
 
 // Allows access to values from a form as 'request.body.<field>
-app.use(express.urlencoded( {extended: false} ))
+app.use( express.urlencoded( { extended: false } ) );
+
+app.use( cookieParser() );
 
 // Middleware to set the errors array to an empty array so that we don't get an error when we first load the page.
 app.use( function ( req, res, next ) {
   res.locals.errors = [];
+
+  // Try to decode incoming cookie to determine if user is logged in.
+  try {
+    const decoded = jwt.verify( req.cookies.OurWonderfulApp, process.env.JWTSECRET );
+    req.user = decoded
+  } catch (error) {
+    req.user = false;
+  }
+
+
+  res.locals.user = req.user;
+  console.log( req.user);
+
   next();
 } );
 
