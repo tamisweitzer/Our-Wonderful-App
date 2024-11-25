@@ -41,7 +41,6 @@ app.use( cookieParser() );
 // Middleware to set the errors array to an empty array so that we don't get an error when we first load the page.
 app.use( function ( req, res, next ) {
   res.locals.errors = [];
-
   // Try to decode incoming cookie to determine if user is logged in.
   try {
     const decoded = jwt.verify( req.cookies.OurWonderfulApp, process.env.JWTSECRET );
@@ -49,7 +48,6 @@ app.use( function ( req, res, next ) {
   } catch (error) {
     req.user = false;
   }
-
 
   res.locals.user = req.user;
   console.log( req.user);
@@ -61,8 +59,15 @@ app.use( function ( req, res, next ) {
 // List of Routes
 
 // GET '/' Home
-app.get( '/', (req, res) => {
-  res.render('homepage');
+app.get( '/', ( req, res ) => {
+
+  if ( req.user ) {
+    return res.render('dashboard')
+  }
+  else {
+    return res.render('homepage');
+  }
+
 } );
 
 // GET '/login' Display login screen.
@@ -103,7 +108,6 @@ const errors = [];
     return res.render( 'homepage', { errors } );
   }
 
-
   // Encrypt the password before sending to the database.
   const salt = bcrypt.genSaltSync( 10 );
   req.body.password = bcrypt.hashSync( req.body.password, salt );
@@ -137,11 +141,13 @@ const errors = [];
     maxAge: oneDay
   } );
 
-
   res.send( "<a href='/' style='font-size:2.5rem;'>Registration complete!</a>" );
-
 } );
 
+
+app.get( '/dashboard', ( req, res ) => {
+  res.render( 'dashboard' );
+})
 
 
 app.listen( 3000 );

@@ -3,14 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Homepage | Our Wonderful App</title>
+  <title>Dashboard | Our Wonderful App</title>
   <!-- Minified version -->
   <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css"> -->
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
   <header>
-    <h1><a href="/">Our Wonderful App</a></h1>
+    <h1>
+      <a href="/">Our Wonderful App</a>
+    </h1>
 
     <nav>
       <a href="/">Home</a>
@@ -25,24 +27,8 @@
   </header>
 
   <main>
-    <h2>Home</h2>
+    <h2>Dashboard for <%= user.username %></h2>
     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-
-    <% errors.forEach(error => { %>
-    <p class="notice"><%= error %></p>
-    <% }) %>
-    <form action="/register" method="POST" id="register-form" name="register-form">
-      <fieldset>
-        <legend>Create an account</legend>
-        <label for="username" name="lbl-username">Username</label>
-        <input type="text" id="username" name="username">
-
-        <label for="password" name="lbl-password">Password</label>
-        <input type="password" id="password" name="password">
-        <br>
-        <input type="submit" id="submit" name="submit"></input>
-      </fieldset>
-    </form>
   </main>
 
   <footer>
