@@ -85,6 +85,10 @@ app.get( '/dashboard', ( req, res ) => {
   res.render( 'dashboard' );
 } );
 
+// GET '/create-post' Navigate to the Create Post page.
+app.get( '/create-post', ( req, res ) => {
+  res.render( 'create-post' );
+})
 
 // POST Requests_______________________
 
