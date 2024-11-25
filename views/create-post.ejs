@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<% pageTitle="Create Post"; %>
+<%- include('inc/head') %>
+<body>
+  <%- include('inc/header') %>
+
+  <main>
+    <h2>Create Post</h2>
+
+    <% errors.forEach(error => { %>
+    <p class="notice"><%= error %></p>
+    <% }) %>
+
+    <form action="/create-post" method="POST" id="login-form" name="login-form">
+      <fieldset>
+        <legend>Create a new post</legend>
+        <label for="post-title" name="lbl-post-title" class="w-full">Post Title</label>
+        <input type="text" id="post-title" name="post-title">
+
+        <label for="post-body" name="lbl-post-body">Post Body</label>
+        <textarea type="post-body" id="post-body" name="post-body" rows="15"></textarea>
+        <br>
+        <input type="submit" id="submit" name="submit" />
+      </fieldset>
+    </form>
+  </main>
+
+  <%- include('inc/footer') %>
+</body>
+</html>
